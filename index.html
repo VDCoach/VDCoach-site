@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Coaching sportif personnalisé à domicile sur Nantes et agglomération. Perte de poids, remise en forme et musculation avec VDCoach." />
+    <meta name="keywords" content="Coach sportif Nantes, Coaching à domicile, Remise en forme Nantes, Musculation, Entraînement personnel" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Coach Sportif à Domicile Nantes | VDCoach" />
+    <meta property="og:description" content="Coaching sportif personnalisé à domicile sur Nantes et agglomération. Perte de poids, remise en forme et musculation avec VDCoach." />
+    
+    <title>Coach Sportif à Domicile Nantes | VDCoach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- JSON-LD Local Business Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HealthAndBeautyBusiness",
+      "name": "VDCoach Sportif",
+      "image": "",
+      "@id": "",
+      "url": "",
+      "telephone": "0600000000",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Nantes",
+        "addressRegion": "Pays de la Loire",
+        "addressCountry": "FR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 47.2184,
+        "longitude": -1.5536
+      },
+      "description": "Coach sportif à domicile à Nantes. Accompagnement premium en remise en forme, musculation et course à pied.",
+      "priceRange": "€€"
+    }
+    </script>
+  </head>
+  <body>
+    <!-- Formulaire fantôme pour que Netlify détecte les champs au moment du build -->
+    <form name="contact-coach" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="nom" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+    </form>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
