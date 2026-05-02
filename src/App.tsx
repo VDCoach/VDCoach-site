@@ -33,6 +33,19 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Load Trustindex script dynamically after React has mounted the DOM
+    if (document.querySelector('script[src*="trustindex"]')) return; // already loaded
+    const script = document.createElement('script');
+    script.src = 'https://cdn.trustindex.io/loader.js?bff495c70a7399786d469e3c7ad';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -131,13 +144,11 @@ export default function App() {
           {/* Hero Image Concept */}
           <div className="flex-1 w-full max-w-lg lg:max-w-none relative mt-10 lg:mt-0">
              <div className="aspect-[4/5] bg-primary/5 rounded-[2.5rem] overflow-hidden relative border border-primary/10">
-               {/* Suggestion for user to place their image here, using an elegant placeholder for now */}
-               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center text-primary/40">
-                  <div className="w-24 h-24 border-4 border-primary/20 rounded-full flex items-center justify-center mb-6">
-                     <span className="text-4xl font-bold">VD</span>
-                  </div>
-                  <p className="text-sm">Emplacement pour votre<br/>photo professionnelle</p>
-               </div>
+               <img 
+                 src="images/coach-sportif-nantes-vdcoach-sportif.JPG" 
+                 alt="VDCoach - Coach Sportif à Nantes" 
+                 className="w-full h-full object-cover"
+               />
              </div>
              
              {/* Floating badge */}
@@ -271,33 +282,11 @@ export default function App() {
             className="text-center max-w-2xl mx-auto mb-16"
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-6">Ils ont atteint leurs objectifs.</h2>
-            <p className="text-lg text-background-cream/70">Ne me croyez pas sur parole, écoutez ceux qui l'ont fait.</p>
+            <p className="text-lg text-background-cream/70">Avis certifiés sur Google.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { name: "Sophie M.", goal: "Remise en forme", text: "Après ma grossesse, j'avais besoin d'être accompagnée. VDCoach a su me redonner confiance avec un programme doux mais efficace." },
-              { name: "Thomas R.", goal: "Prise de masse", text: "Je stagnais à la salle. Le fait d'avoir un coach à domicile m'a fait gagner un temps précieux et les résultats sont là." },
-              { name: "Claire & Julien", goal: "Préparation 10km", text: "La formule Duo était parfaite pour nous motiver à courir en hiver. On a battu notre record personnel !" }
-            ].map((testimonial, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-white/10 backdrop-blur-md p-8 rounded-[2rem]"
-              >
-                <div className="flex text-yellow-400 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
-                </div>
-                <p className="italic mb-6 text-background-cream/90">"{testimonial.text}"</p>
-                <div>
-                  <p className="font-bold">{testimonial.name}</p>
-                  <p className="text-sm text-background-cream/60">{testimonial.goal}</p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="min-h-[400px] w-full flex items-center justify-center">
+            <div className="ti-widget" data-trustindex-widget-id="bff495c70a7399786d469e3c7ad"></div>
           </div>
         </div>
       </section>
