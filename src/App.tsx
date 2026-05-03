@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Activity, Dumbbell, Route, CheckCircle2, Mail, MapPin, Phone, Star, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function App() {
+export default function App({ onNavigate }: { onNavigate: (page: 'mentions' | 'confidentialite') => void }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,15 +34,20 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // Load Trustindex script dynamically after React has mounted the DOM
-    if (document.querySelector('script[src*="trustindex"]')) return; // already loaded
+    // Évite de charger le script plusieurs fois
+    if (document.querySelector('script[src*="trustindex"]')) return;
+
     const script = document.createElement('script');
-    script.src = 'https://cdn.trustindex.io/loader.js?bff495c70a7399786d469e3c7ad';
+    // On charge le loader de base (sans la clé API ici, car elle est sur la div)
+    script.src = 'https://cdn.trustindex.io/loader.js';
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
+
     return () => {
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
   }, []);
 
@@ -63,9 +68,15 @@ export default function App() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl font-bold tracking-tighter" onClick={() => scrollTo('accueil')} style={{cursor: 'pointer'}}>
-            VD<span className="font-light">Coach</span>
-          </div>
+  
+  {/* Ton nouveau logo en SVG */}
+  <div onClick={() => scrollTo('accueil')} className="cursor-pointer flex items-center">
+    <img 
+      src="images/logo-vdcoach.svg" 
+      alt="VDCoach Sportif Nantes" 
+      className="h-10 md:h-14 w-auto" 
+    />
+  </div>
           
           {/* Desktop Nav */}
           <nav className="hidden xl:flex gap-8 font-medium text-sm tracking-wide">
@@ -121,7 +132,7 @@ export default function App() {
               Votre <span className="italic font-light">coach sportif</span> à domicile sur Nantes.
             </h1>
             <p className="text-lg md:text-xl text-primary/80 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Un accompagnement premium et sur-mesure pour atteindre vos objectifs physiques et mentaux, directement chez vous.
+              Un accompagnement premium et sur-mesure pour atteindre vos objectifs physiques directement chez vous.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a 
@@ -157,8 +168,8 @@ export default function App() {
                   <CheckCircle2 size={24} />
                 </div>
                 <div>
-                  <p className="font-bold text-lg">100%</p>
-                  <p className="text-sm text-primary/70 font-medium">Sur-mesure</p>
+                  <p className="font-bold text-lg">Diplômé</p>
+                  <p className="text-sm text-primary/70 font-medium">STAPS</p>
                 </div>
              </div>
           </div>
@@ -171,7 +182,7 @@ export default function App() {
           <div className="text-center md:text-left mb-16 flex flex-col md:flex-row justify-between items-end gap-6">
             <div className="max-w-2xl">
               <h2 className="text-3xl md:text-5xl font-bold mb-6">Des programmes adaptés à vos ambitions.</h2>
-              <p className="text-lg text-primary/70">Quel que soit votre niveau ou votre objectif, nous définissons ensemble le chemin pour y parvenir efficacement et en toute sécurité.</p>
+              <p className="text-lg text-primary/70">Quel que soit votre niveau ou votre objectif, définissons ensemble le chemin pour y parvenir efficacement et en toute sécurité.</p>
             </div>
           </div>
 
@@ -183,7 +194,7 @@ export default function App() {
               </div>
               <h3 className="text-xl font-bold mb-4">Remise en forme</h3>
               <p className="text-primary/70 leading-relaxed mb-6">
-                Retrouvez vitalité et énergie au quotidien. Un programme progressif pour tonifier votre corps et améliorer votre cardio sans brusquer.
+                Vous n'êtes plus très en forme ? Vous avez l'impression de partir de loin ? Aucun soucis, les premiers gains sont les plus rapides ! En quelques semaines, vous retrouverez plus de force, plus de cardio et plus de mobilité !
               </p>
             </div>
 
@@ -194,7 +205,7 @@ export default function App() {
               </div>
               <h3 className="text-xl font-bold mb-4">Musculation</h3>
               <p className="text-background-cream/80 leading-relaxed mb-6">
-                Développement musculaire, force et posture. Entraînements ciblés avec matériel professionnel apporté directement chez vous.
+                Objectif developpement musculaire ! Que ce soit à des fins d'esthétique, d'augmentation de la force et de la performance où encore de prévention, la musculation à de très nombreux bienfaits, pour tout le monde et à tout âge.
               </p>
             </div>
 
@@ -205,7 +216,7 @@ export default function App() {
               </div>
               <h3 className="text-xl font-bold mb-4">Course à pieds</h3>
               <p className="text-primary/70 leading-relaxed mb-6">
-                Préparation spécifique (10km, semi, marathon) ou initiation. Accompagnement technique en extérieur sur les bords de l'Erdre ou la Loire.
+                Préparation spécifique (10km, semi, marathon, Trail / Ultra Trail) ou initiation. Accompagnement technique en extérieur et renforcement musculaire spécifique. Accompagnement nutritionnel et technique pour performer le jour J !
               </p>
             </div>
           </div>
@@ -217,7 +228,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-6">Des tarifs clairs, sans engagement.</h2>
-            <p className="text-lg text-primary/70">Séances d'une heure, matériel inclus, directement à votre domicile sur Nantes et son agglomération.</p>
+            <p className="text-lg text-primary/70">Séances de 45min à 1h, matériel inclus, directement à votre domicile sur Nantes et son agglomération.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -247,7 +258,7 @@ export default function App() {
                 <span className="text-white/60">/h</span>
               </div>
               <p className="text-sm text-white/80 mb-8 border-t border-white/10 pt-6 w-full">
-                Soit 32,50€ par personne. Idéal pour se motiver en couple ou entre amis.
+                Soit 32,50€ par personne. Pour se motiver en couple ou entre amis.
               </p>
               <a href="https://cal.eu/vdcoach-sportif" target="_blank" rel="noopener noreferrer" className="block text-center mt-auto w-full py-3 rounded-full bg-white text-primary font-semibold hover:bg-background-cream transition-colors">
                 Choisir
@@ -268,32 +279,47 @@ export default function App() {
                 Choisir
               </a>
             </div>
+			</div>
+
+          {/* Badge Service à la personne */}
+          <div className="flex justify-center mt-10">
+            <div className="flex items-center gap-4 px-6 py-3 bg-white rounded-xl border border-primary/10 max-w-md">
+              <img src="images/sap.webp" alt="Service à la personne" className="h-7 w-auto" />
+              <div className="w-px h-7 bg-primary/10" />
+              <div>
+                <p className="text-sm font-medium text-primary">Agréé Service à la personne</p>
+                <p className="text-xs text-primary/60">Réduction d'impôt de <strong className="text-[#0F6E56]">50%</strong> sur vos séances</p>
+              </div>
+            </div>
           </div>
+
         </div>
       </section>
+         
 
-      {/* Testimonials Section */}
-      <section id="temoignages" className="py-24 px-6 bg-primary text-background-cream">
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-2xl mx-auto mb-16"
-          >
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">Ils ont atteint leurs objectifs.</h2>
-            <p className="text-lg text-background-cream/70">Avis certifiés sur Google.</p>
-          </motion.div>
+     {/* Testimonials Section */}
+<section id="temoignages" className="py-24 px-6 bg-primary text-background-cream">
+  <div className="max-w-7xl mx-auto">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="text-center max-w-2xl mx-auto mb-16"
+    >
+      <h2 className="text-3xl md:text-5xl font-bold mb-6">Ils ont atteint leurs objectifs.</h2>
+      <p className="text-lg text-background-cream/70"> Soyez le prochain.</p>
+    </motion.div>
 
-          <div className="min-h-[400px] w-full flex items-center justify-center">
-            <div className="ti-widget" data-trustindex-widget-id="bff495c70a7399786d469e3c7ad"></div>
-          </div>
-        </div>
-      </section>
+    {/* Version optimisée pour React selon TrustIndex */}
+    <div id="trustindex-container" className="min-h-[200px] w-full flex justify-center">
+      <div src="https://cdn.trustindex.io/loader.js?0c18738715e6001f00464ff6c90"></div>
+    </div>
+  </div>
+</section>
 
       {/* FAQ Section */}
       <section id="faq" className="py-24 px-6 bg-white">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -303,11 +329,14 @@ export default function App() {
             <h2 className="text-3xl md:text-5xl font-bold mb-6">Questions fréquentes</h2>
           </motion.div>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               { q: "Dois-je acheter du matériel ?", a: "Non, je me déplace avec tout le matériel nécessaire (haltères, élastiques, tapis, kettlebells) pour assurer une séance complète." },
+			  { q: "Comment se passe la première séance ?", a: "Pour la première séance, je réalise un bilan me permettant de mieux connaitre vos points forts et vos points faibles. Nous discutons ensemble de l'objectif et nous commençons à réfléchir à la meilleure méthode pour vous y mener." },
               { q: "Quelle est la zone de déplacement ?", a: "Je me déplace gratuitement sur Nantes et dans un rayon de 15km autour (Rezé, Saint-Herblain, Orvault, Carquefou...)." },
-              { q: "Combien de séances par semaine sont recommandées ?", a: "Pour des résultats visibles, je recommande 2 séances par semaine. Mais 1 séance encadrée + 1 séance en autonomie (programme fourni) est aussi un excellent compromis." }
+              { q: "Combien de séances par semaine sont recommandées ?", a: "Pour des résultats plus rapides et importants, je recommande 2 séances par semaine, mais même une seance par semaine est déjà un pas vers votre objectif !" },
+			  { q: "En combien de temps vais-je voir des résultats ? ", a: " Si vous êtes débutants et peu en forme, ce sera très rapide, quelques séances vous permetrons déjà de voir un début d'amélioration. Plus vous êtes en forme, plus vous devrez patienter." },
+			  { q: "Quelle est ta méthode ou ta philosophie de coaching ? Plutôt militaire ou bienveillance et écoute ?", a: "Plûtot bienveillance et écoute, avec comme tout à chacun un potentiel d'adaptation à la personne en face de moi. Attention, bienveillance n'est pas complaisance, ma première mission reste de vous mener vers votre objectif, toujours en sécurité physique et mentale. " }
             ].map((item, i) => (
               <motion.div 
                 key={i}
@@ -353,7 +382,7 @@ export default function App() {
               href="https://cal.eu/vdcoach-sportif" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-light transition-colors mb-12 shadow-lg"
             >
-              Planifier un appel gratuit
+              Planifier un appel ou une séance d'essai
               <ArrowRight size={20} />
             </a>
 
@@ -373,7 +402,13 @@ export default function App() {
                 </div>
                 <div>
                   <h4 className="font-bold">Téléphone</h4>
-                  <p className="text-primary/70">06 62 11 07 86</p>
+                  {/* AJOUT ICI : Numéro cliquable pour appel direct */}
+                  <a 
+                    href="tel:+33662110786" 
+                    className="text-primary/70 hover:text-primary transition-colors font-medium block"
+                  >
+                    06 62 11 07 86
+                  </a>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -382,7 +417,12 @@ export default function App() {
                 </div>
                 <div>
                   <h4 className="font-bold">Email</h4>
-                  <p className="text-primary/70">vdcoachsportif@gmail.com</p>
+                  <a 
+                    href="mailto:vdcoachsportif@gmail.com" 
+                    className="text-primary/70 hover:text-primary transition-colors font-medium block"
+                  >
+                    vdcoachsportif@gmail.com
+                  </a>
                 </div>
               </div>
             </div>
@@ -463,7 +503,7 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-primary text-white py-12 px-6">
+      <footer className="bg-primary text-white py-12 px-6 relative">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-2xl font-bold tracking-tighter">
             VD<span className="font-light">Coach</span>
@@ -472,12 +512,20 @@ export default function App() {
             © {new Date().getFullYear()} VDCoach Sportif Nantes. Tous droits réservés.
           </p>
           <div className="flex gap-6 text-sm text-white/60">
-            <a href="#" className="hover:text-white transition-colors">Mentions légales</a>
-            <a href="#" className="hover:text-white transition-colors">Politique de confidentialité</a>
+            <button onClick={() => { onNavigate('mentions'); window.scrollTo(0,0); }} className="hover:text-white transition-colors">Mentions légales</button>
+            <button onClick={() => { onNavigate('confidentialite'); window.scrollTo(0,0); }} className="hover:text-white transition-colors">Politique de confidentialité</button>
           </div>
         </div>
       </footer>
+
+      {/* AJOUT ICI : Bouton d'appel flottant mobile uniquement */}
+      <a 
+        href="tel:+33662110786"
+        className="md:hidden fixed bottom-6 right-6 bg-primary text-white p-4 rounded-full shadow-2xl z-50 flex items-center justify-center"
+        aria-label="Appeler David"
+      >
+        <Phone size={20} />
+      </a>
     </div>
   );
 }
-
